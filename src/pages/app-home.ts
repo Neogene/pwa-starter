@@ -11,7 +11,7 @@ export class AppHome extends LitElement {
 
   // For more information on using properties and state in lit
   // check out this link https://lit.dev/docs/components/properties/
-  @property() message = 'Welcome!';
+  @property() message = 'Splink!';
 
   static get styles() {
     return [
@@ -68,10 +68,36 @@ export class AppHome extends LitElement {
 
   share() {
     if ((navigator as any).share) {
-      (navigator as any).share({
+      /*(navigator as any).share({
         title: 'PWABuilder pwa-starter',
         text: 'Check out the PWABuilder pwa-starter!',
         url: 'https://github.com/pwa-builder/pwa-starter',
+      });*/
+
+    fetch("vcard.vcf")
+      .then(function(response) {
+      return response.text()
+      })
+      .then(function(text) {
+
+          var file = new File([text], "andrea_leganza.vcf", {type: 'text/vcard'}); //text/x-vcard
+          var filesArray = [file];
+          var shareData = { files: filesArray, title: "Andrea Leganza" };
+
+          if (navigator.canShare && navigator.canShare(shareData)) {
+
+          // Adding title afterwards as navigator.canShare just
+          // takes files as input
+          shareData.title = "Andrea Leganza";
+
+          navigator.share(shareData)
+          .then(() => console.log("Sharing successful."))
+          .catch((error) => alert('Sharing failed: '+ error));
+
+          } else {
+            alert("Your system doesn't support sharing files.")
+            console.log("Your system doesn't support sharing files.");
+          }
       });
     }
   }
@@ -102,9 +128,7 @@ export class AppHome extends LitElement {
               and the Apple App Store!
             </p>
 
-            ${'share' in navigator
-              ? html`<sl-button slot="footer" variant="primary" @click="${this.share}">Share this Starter!</sl-button>`
-              : null}
+            <sl-button slot="footer" variant="primary" @click="${this.share}">Share this Starter!</sl-button>
           </sl-card>
 
           <sl-card id="infoCard">
