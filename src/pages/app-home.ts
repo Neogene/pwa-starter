@@ -80,7 +80,7 @@ export class AppHome extends LitElement {
       })
       .then(function(text) {
 
-          var file = new File([text], "vcard_lite.vcf", {type: 'text/x-vcard'}); //text/x-vcard
+          var file = new File([text], "vcard_lite.vcf", {type: 'text/vcard'}); //text/x-vcard
           var filesArray = [file];
           var shareData = { files: filesArray, title: "Andrea Leganza" };
 
